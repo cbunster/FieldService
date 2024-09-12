@@ -29,8 +29,12 @@ export class OFS {
         this._credentials = v;
         this._hash = OFS.authenticateUser(v);
         if ("baseURL" in v && v.baseURL != "") {
+            console.debug(`Using baseURL from credentials ${v.baseURL}`);
             this._baseURL = new URL(v.baseURL!);
         } else {
+            console.debug(
+                `Using baseURL from instance https://${this.instance}.${OFS.DEFAULT_DOMAIN}`
+            );
             this._baseURL = new URL(
                 `https://${this.instance}.${OFS.DEFAULT_DOMAIN}`
             );
@@ -53,8 +57,10 @@ export class OFS {
     }
     private static authenticateUser(credentials: OFSCredentials): string {
         if ("token" in credentials && credentials.token != "") {
+            console.debug(`Using Bearer token authentication`);
             return "Bearer " + credentials.token;
         } else {
+            console.debug(`Using Basic authentication`);
             var token =
                 credentials.clientId +
                 "@" +
